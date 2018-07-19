@@ -36,17 +36,34 @@
             dt.setFullYear(document.getElementById('du1-yr').value);
             dt.setMonth(document.getElementById('du1-mn').value);
             dt.setDate(document.getElementById('du1-dy').value);
-//
-            let startUnix = Math.round(dt/1000);
-
-            dt.setUTCHours('23');
-            dt.setUTCMinutes('59');
-            dt.setUTCSeconds('59');
-
-            let endUnix = Math.round(dt/1000);
-
+            let startUnix = getStartTime(dt);
+            let endUnix = getEndTime(dt);
             document.getElementById('du1-res-start').innerHTML = 'start of day: ' + startUnix;
             document.getElementById('du1-res-end').innerHTML = 'end of day: ' + endUnix;
+        }
+
+        function getUnixFromDate () {
+            console.log(document.getElementById('parsedate').value);
+            date = new Date(document.getElementById('parsedate').value);
+            document.getElementById('date-to-unix-one').innerHTML = date.getTime();
+        }
+
+        function getStartTime (date) {
+            date.setUTCHours('00');
+            date.setUTCMinutes('00');
+            date.setUTCSeconds('00');
+            date.setUTCMilliseconds('00');
+
+            return Math.round(date/1000);
+        }
+
+        function getEndTime (date) {
+            date.setUTCHours('23');
+            date.setUTCMinutes('59');
+            date.setUTCSeconds('59');
+            date.setUTCMilliseconds('00');
+
+            return Math.round(date/1000);
         }
 
         function runScript(e) {
@@ -164,6 +181,40 @@
                 </div>
                 <div class="col-4 text-center">
                     <p id="du1-res-end" class="text-primary"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5"></div>
+    <div class="row" id="du2">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-header text-center">
+                        <h2>date &rarr; unixtime</h2>
+                    </div>
+                </div>
+                <div class="mt-4"></div>
+            </div>
+            <div class="mt-4"></div>
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <input type="datetime-local" class="form-control" id="parsedate">
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <button class="btn btn-block btn-outline-primary" onclick="getUnixFromDate()">date &rarr; timestamp </button>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4"></div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p id="date-to-unix-one" class="text-primary"></p>
                 </div>
             </div>
         </div>
