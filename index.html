@@ -1,29 +1,52 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <title> UnixTime Tools </title>
+    <title>UTC | olegt.ru</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="resources/css/bootstrap.min.css" type="text/css"/>
-    <link href="https://fonts.googleapis.com/css?family=Didact+Gothic&amp;subset=cyrillic" rel="stylesheet">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no"/>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment-with-locales.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/locale/ru.js"></script>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no"/>
+    <script src="resources/js/moment/moment-with-locales.min.js"></script>
+    <script src="resources/js/moment/ru.js"></script>
     <script type="text/javascript">
-        window.onload = function() {
-
+        window.onload = function () {
             document.getElementById("unixtime").value = moment().unix();
+            fillDayMonYear();
         };
 
         function getTimeFromUnix() {
-
-            var unix = document.getElementById('unixtime').value;
-            var timestamp = moment.unix(parseInt(unix)).format();
-            document.getElementById("hash").innerHTML = timestamp;
+            document.getElementById("unix-to-date-one").innerHTML = moment.unix(parseInt(document.getElementById('unixtime').value)).format();
         }
 
-        function after() {
+        function fillDayMonYear() {
+            let date = new Date();
+            console.log(date);
+            document.getElementById('du1-dy').value = date.getUTCDate();
+            if (date.getMonth().toString().length < 2) {
+                document.getElementById('du1-mn').value = '0' + date.getUTCMonth();
+            } else {
+                document.getElementById('du1-mn').value = date.getUTCMonth();
+            }
+            document.getElementById('du1-yr').value = date.getUTCFullYear();
+        }
 
+        function getStartEndUnix (ms) {
+
+            dt = new Date();
+            dt.setFullYear(document.getElementById('du1-yr').value);
+            dt.setMonth(document.getElementById('du1-mn').value);
+            dt.setDate(document.getElementById('du1-dy').value);
+//
+            let startUnix = Math.round(dt/1000);
+
+            dt.setUTCHours('23');
+            dt.setUTCMinutes('59');
+            dt.setUTCSeconds('59');
+
+            let endUnix = Math.round(dt/1000);
+
+            document.getElementById('du1-res-start').innerHTML = 'start of day: ' + startUnix;
+            document.getElementById('du1-res-end').innerHTML = 'end of day: ' + endUnix;
         }
 
         function runScript(e) {
@@ -38,65 +61,115 @@
     html, body {
         overflow-x: hidden;
     }
-    h1 {
-        font-family: 'Didact Gothic', sans-serif;
-    }
 </style>
 <body>
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="#">Helper</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation" style="">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarColor01">
+    <div class="collapse navbar-collapse" id="navbarColor02">
         <ul class="navbar-nav mr-auto">
+            <li class="nav-item ">
+                <a class="nav-link" href="http://md5.olegt.ru">MD5</a>
+            </li>
             <li class="nav-item">
-                <a class="nav-link" href="//md5.olegt.ru">Генератор md5</a>
+                <a class="nav-link" href="http://sql.olegt.ru">SQL</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="//unix.olegt.ru">UnixTime Tools</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="//sql.olegt.ru">SQL beautifier</a>
+                <a class="nav-link" href="http://utc.olegt.ru">UTC</a>
             </li>
         </ul>
     </div>
 </nav>
 
 
-<div class="container py-5 text-center" >
-    <div class="col-12 py-5">
-        <legend>Convert UnixTime</legend>
-        <div class="row">
-            <div class="col-xs-12 col-lg-6 offset-3">
-                <div class="row text-center">
-                    <div class="col-xs-1 col-md-1"></div>
-                    <div class="col-xs-10 col-md-10">
-                        <div class="form-group">
-                            <input type="email" class="form-control text-center" id="unixtime" aria-describedby="emailHelp"
-                                   placeholder="Enter email" onkeypress="return runScript(event)" autofocus>
-                            <small id="emailHelp" class="form-text text-muted">
-                                current unixtime by default
-                            </small>
-                        </div>
-
-                        <br/>
-                        <button type="button" onclick="getTimeFromUnix();" value="Get time"
-                                class="btn btn-block btn-primary">Convert
-                        </button>
-                        <br/>
+<div class="container" id="main">
+    <div class="mt-4"></div>
+    <div class="page-header text-center">
+        <h1>Unix Time Converter</h1>
+    </div>
+    <div class="mt-4"></div>
+    <div class="row" id="ud1">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-header text-center">
+                        <h2>timestamp &rarr; date</h2>
                     </div>
-                    <p></p>
                 </div>
-                <div class="col-lg-8 offset-2">
-                    <h3 class="text-center" id="hash"></h3>
+                <div class="mt-4"></div>
+            </div>
+            <div class="mt-4"></div>
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="unixtime">
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <button class="btn btn-block btn-outline-primary" onclick="getTimeFromUnix()">timestamp &rarr; date
+                        </button>
+                    </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p id="unix-to-date-one" class="text-primary"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="mt-5"></div>
+    <div class="row" id="du1">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-header text-center">
+                        <h2>date &rarr; start + end of day in unixtime</h2>
+                    </div>
+                </div>
+                <div class="mt-4"></div>
+            </div>
+            <div class="mt-4"></div>
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <input type="number" step="1" max="31" class="form-control" id="du1-dy">
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <input type="number" step="1" max="12" class="form-control" id="du1-mn">
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <input type="number" step="1" max="2222" class="form-control" id="du1-yr">
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <button class="btn btn-block btn-outline-primary" onclick="getStartEndUnix()">get start & end
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4"></div>
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col-4 text-center">
+                    <p id="du1-res-start" class="text-primary"></p>
+                </div>
+                <div class="col-4 text-center">
+                    <p id="du1-res-end" class="text-primary"></p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+
 </body>
 </html>
