@@ -34,7 +34,9 @@ function getStartEndUnix(ms) {
 function getUnixFromDate() {
     console.log(document.getElementById('parsedate').value);
     date = new Date(document.getElementById('parsedate').value);
-    document.getElementById('date-to-unix-one').innerHTML = date.getTime()/1000;
+    document.getElementById('date-to-unix-one').innerHTML = !isNaN(parseInt(date.getTime())) ? date.getTime()/1000 : 'Ошибка преобразования'
+
+
 }
 
 function getStartTime(date) {
